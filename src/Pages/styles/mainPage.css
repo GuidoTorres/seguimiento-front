@@ -1,0 +1,40 @@
+.header {
+    padding-top: 12px;
+    background: #fff;
+    height: 60px;
+    z-index: 1;
+    border-bottom: 1px solid rgb(228, 228, 228);
+    position: sticky !important;
+    top: 0;
+    right: 0;
+  }
+  .content {
+    margin: 24px 16px;
+    padding: 20px;
+  }
+  
+  .triger-btn {
+    font-size: 16px;
+    width: 50px;
+    height: 50px;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+  }
+  
+  .sider {
+    height: 100vh;
+    position: sticky !important;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 1;
+  
+    border-right: 1px solid rgb(228, 228, 228);
+  }
+  .logo {
+    color: #4f6f52;
+    margin: 30px 0;
+    font-size: 1.5rem;
+  }
+  
