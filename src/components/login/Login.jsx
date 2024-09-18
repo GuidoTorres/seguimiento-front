@@ -96,6 +96,55 @@ const Login = ({}) => {
           <Input
             onChange={(e) => handleData(e.target.value, "usuario")}
             placeholder={"Usuario"}
+                <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          border: "1px solid ligthgrey",
+          width: "400px",
+          height: "380px",
+          borderRadius: "8px",
+          padding: "20px",
+          backgroundColor: "white",
+        }}
+      >
+        <img src={imagen} alt="logo" width={"100%"} />
+
+        <div style={{ marginTop: "40px", textAlign: "left" }}>
+          <Input
+            onChange={(e) => handleData(e.target.value, "usuario")}
+            placeholder={"Usuario"}
+            onKeyPress={(e) => e.key === "Enter" && auth()}
+          />
+        </div>
+        <div style={{ marginTop: "25px", textAlign: "left" }}>
+          <Input.Password
+            onChange={(e) => handleData(e.target.value, "contrasenia")}
+            placeholder={"Contraseña"}
+            onKeyPress={(e) => e.key === "Enter" && auth()}
+          />
+        </div>
+        <div style={{ marginTop: "30px" }}>
+          <Button
+            style={{
+              width: "100%",
+              backgroundColor: "#03A859",
+              color: "white",
+            }}
+            onClick={auth}
+          >
+            Iniciar Sesión
+          </Button>
+        </div>
+      </div>
+    </div>
           />
         </div>
         <div style={{ marginTop: "25px", textAlign: "left" }}>
