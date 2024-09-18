@@ -35,7 +35,35 @@ const Login = ({}) => {
       localStorage.setItem("token", confirm?.tokenSession);
       localStorage.setItem("rol", JSON.stringify(confirm?.data?.rol));
       localStorage.setItem("permisos", JSON.stringify(confirm?.data?.permisos));
-      navigate("/recepcion");
+
+      const permisos = confirm?.data?.permisos;
+
+      // Crear un mapa de rutas basado en los permisos
+      const permissionRoutes = {
+        recepcion: "/recepcion",
+        conformidades: "/conformidad",
+        seguimiento: "/seguimiento",
+        alta_bienes: "/alta",
+        dashboard: "/dashboard",
+      };
+
+      if (permisos && permisos.length > 0) {
+        // Buscar el primer permiso que coincida en el mapa de rutas
+        const firstValidPermission = permisos.find(
+          (permiso) => permissionRoutes[permiso]
+        );
+
+        if (firstValidPermission) {
+          // Redirigir a la ruta correspondiente del primer permiso válido
+          navigate(permissionRoutes[firstValidPermission]);
+        } else {
+          // Redirigir a una ruta por defecto si no se encuentra ningún permiso válido
+          navigate("/default-route");
+        }
+      } else {
+        // En caso de que no haya permisos, redirigir a una ruta por defecto
+        navigate("/default-route");
+      }
     } else {
       notification.error({
         message: confirm.msg,
