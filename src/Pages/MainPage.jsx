@@ -19,6 +19,9 @@ import MenuRecepcionados from "../components/conformidad/MenuRecepcionados";
 import BienesPatrimoni from "../components/altaBienes/BienesPatrimoni";
 import Seguimiento from "../components/seguimiento/Seguimiento";
 import Dashboard from "../components/dashboard/Dashboard";
+import MenuCotizaciones from "../components/cotizaciones/MenuCotizaciones";
+import CotizacionBienes from "../components/cotizaciones/CotizacionBienes";
+import CotizacionServicios from "../components/cotizaciones/CotizacionServicios";
 const { Sider, Header, Content } = Layout;
 
 const MainPage = () => {
@@ -122,7 +125,7 @@ const MainPage = () => {
                     </ProtectedRoute>
                   }
                 />
-                               <Route
+                <Route
                   path="/alta"
                   element={
                     <ProtectedRoute>
@@ -135,6 +138,30 @@ const MainPage = () => {
                   element={
                     <ProtectedRoute>
                       <Dashboard setTitle={setTitle} />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/cotizacion"
+                  element={
+                    <ProtectedRoute>
+                      <MenuCotizaciones setTitle={setTitle} />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/cotizacion/bienes"
+                  element={
+                    <ProtectedRoute>
+                      <CotizacionBienes setTitle={setTitle} />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/cotizacion/servicios"
+                  element={
+                    <ProtectedRoute>
+                      <CotizacionServicios setTitle={setTitle} />
                     </ProtectedRoute>
                   }
                 />

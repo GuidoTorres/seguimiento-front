@@ -288,7 +288,7 @@ const Bienes = ({ setTitle }) => {
               expandedRowRenderPrueba(record?.ordenes),
             defaultExpandedRowKeys: ["0"],
           }}
-        />{" "}
+        />
       </div>
 
       {isModalOpen && (

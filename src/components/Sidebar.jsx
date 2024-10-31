@@ -4,13 +4,12 @@ import {
   UserOutlined,
   LaptopOutlined,
   ApartmentOutlined,
-  ToolOutlined,
   AreaChartOutlined,
   SolutionOutlined,
 } from "@ant-design/icons";
 import "./styles/sidebar.css";
 import imagen from "../assets/autodema.png";
-import { useNavigate, useLocation, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -22,10 +21,14 @@ const Sidebar = () => {
   useEffect(() => {
     const rol = JSON.parse(localStorage.getItem("rol")); // Obtiene el rol almacenado
     const permisos = JSON.parse(localStorage.getItem("permisos")); // Obtiene los permisos almacenados
-
-    // Define los elementos del menú con base en los permisos
     const items = [];
-
+    if (permisos.includes("recepcion")) {
+      items.push({
+        key: "/cotizacion",
+        icon: <UserOutlined />,
+        label: "Cotización B/S",
+      });
+    }
     if (permisos.includes("recepcion")) {
       items.push({
         key: "/recepcion",
