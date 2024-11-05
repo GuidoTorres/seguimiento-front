@@ -14,7 +14,7 @@ const CotizacionBienes = ({ setTitle }) => {
     getCotizaciones()
   }, [])
   const getCotizaciones = async () => {
-    const response = await fetch(`${process.env.REACT_APP_BASE}/cotizaciones/bienes`, {
+    const response = await fetch(`${process.env.REACT_APP_BASE}/cotizaciones?tipo=B`, {
       method: "GET",
       credentials: "include",
     });
@@ -29,27 +29,35 @@ const CotizacionBienes = ({ setTitle }) => {
   const columns = [
     {
       title: "COD",
-      dataIndex: "SEC_SOL_MOD",
+      dataIndex: "secSolMod",
       align: "center",
     },
     {
       title: "SBN",
-      dataIndex: "SBN",
+      dataIndex: "sbn",
       align: "center",
     },
     {
       title: "GLOSA",
-      dataIndex: "GLOSA",
+      dataIndex: "glosa",
       align: "center",
     },
     {
-      title: "ITEM",
-      dataIndex: "NOMBRE_ITEM",
+      title: "BIEN",
+      dataIndex: "nombreItem",
       align: "center",
     },
     {
       title: "DEPENDENCIA",
-      dataIndex: "NOMBRE_DEPEND",
+      dataIndex: "nombreDependencia",
+      align: "center",
+    },
+    {
+      title: "PDF",
+      render: (_, record) => (
+        <FilePdfOutlined style={{ color: record.pdf ? "red" : "grey" }} onClick={() =>handlePdf(record)}/>
+      ),
+      key: "action",
       align: "center",
     },
     {
@@ -59,7 +67,7 @@ const CotizacionBienes = ({ setTitle }) => {
       render: (_, record) => (
         <Flex align="center" justify="center" gap={2}>
           <Switch
-            checked={record?.estado}
+            checked={record?.estado === "pendiente" ? false: true}
             onChange={() => handleEstado(record)}
           />
         </Flex>
@@ -67,6 +75,11 @@ const CotizacionBienes = ({ setTitle }) => {
     },
   ];
 
+  const handlePdf = async (record) => {
+    console.log("====================================");
+    console.log(record);
+    console.log("====================================");
+  };
   const handleEstado = async (record) => {
     // const data = {
     //     nombre: "Recepcionado",
