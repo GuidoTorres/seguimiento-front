@@ -121,7 +121,7 @@ const CotizacionServicios = ({ setTitle }) => {
         if (record.pdf) {
 
             const response = await fetch(
-                `${process.env.REACT_APP_BASE}/cotizaciones/publicacion?id=${record.id}`,
+                `${process.env.REACT_APP_BASE}/cotizaciones/publicacion?id=${record.id}&tipo=S`,
                 {
                     method: "GET",
                     credentials: "include",

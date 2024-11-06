@@ -55,19 +55,32 @@ const CotizacionBienes = ({ setTitle }) => {
     {
       title: "PDF",
       render: (_, record) => (
-        <FilePdfOutlined style={{ color: record.pdf ? "red" : "grey" }} onClick={() =>handlePdf(record)}/>
+        <div>
+          <input
+            type="file"
+            accept="application/pdf"
+            style={{ display: "none" }}
+            id={`upload-${record.id}`}
+            onChange={(e) => handlePdf(e, record)}
+          />
+          <label htmlFor={`upload-${record.id}`}>
+            <FilePdfOutlined
+              style={{ color: record.pdf ? "red" : "grey", cursor: "pointer" }}
+            />
+          </label>
+        </div>
       ),
       key: "action",
       align: "center",
     },
     {
-      title: "Publicar",
+      title: "PUBLICAR",
       align: "center",
       key: "action",
       render: (_, record) => (
         <Flex align="center" justify="center" gap={2}>
           <Switch
-            checked={record?.estado === "pendiente" ? false: true}
+            checked={record?.estado === "pendiente" ? false : true}
             onChange={() => handleEstado(record)}
           />
         </Flex>
@@ -75,42 +88,60 @@ const CotizacionBienes = ({ setTitle }) => {
     },
   ];
 
-  const handlePdf = async (record) => {
-    console.log("====================================");
-    console.log(record);
-    console.log("====================================");
-  };
-  const handleEstado = async (record) => {
-    // const data = {
-    //     nombre: "Recepcionado",
-    //     fecha: dayjs().utc().format(),
-    //     hora: dayjs().format("HH:mm:ss"),
-    //     nro_orden: record.nro_orden,
-    //     completado: false,
-    // };
-    // const response = await fetch(
-    //     `${process.env.REACT_APP_BASE}/cotizacion/bienes/recepcionado/${record.nro_orden}`,
-    //     {
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         method: "POST",
-    //         body: JSON.stringify(data),
-    //         credentials: "include",
-    //     }
-    // );
-    // const confirm = await response.json();
+  const handlePdf = async (e, record) => {
+    const file = e.target.files[0]; // Captura el archivo seleccionado
 
-    // if (response.status === 200) {
-    //     notification.success({
-    //         message: confirm.msg,
-    //     });
-    //     getCotizaciones()
-    // } else {
-    //     notification.error({
-    //         message: confirm.msg,
-    //     });
-    // }
+    if (!file) {
+      alert("Por favor selecciona un archivo PDF.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("pdf", file); // El campo 'pdf' debe coincidir con el backend
+    formData.append("id", record.id); // Agrega el ID del registro
+    formData.append("sbn", record.sbn); // Agrega el ID del registro
+
+    const response = await fetch(
+      `${process.env.REACT_APP_BASE}/cotizaciones/pdf`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const result = await response.json();
+    if (response.ok) {
+      notification.success({ message: result.msg });
+      getCotizaciones();
+    } else {
+      notification.error({ message: result.msg });
+    }
+  };
+
+  const handleEstado = async (record) => {
+    console.log(record.id);
+    if (record.pdf) {
+
+      const response = await fetch(
+        `${process.env.REACT_APP_BASE}/cotizaciones/publicacion?id=${record.id}&tipo=B`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const confirm = await response.json();
+      if (response.status === 200) {
+        notification.success({
+          message: confirm.msg,
+        });
+        getCotizaciones()
+      } else {
+        notification.error({
+          message: confirm.msg,
+        });
+      }
+    } else {
+      notification.error({ message: "Es necesario subir el pdf de la cotización para la publicación del mismo." })
+    }
   };
   return (
     <div style={{ marginTop: "20px" }}>
