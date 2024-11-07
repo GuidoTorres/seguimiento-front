@@ -32,21 +32,21 @@ const CotizacionBienes = ({ setTitle }) => {
       dataIndex: "secSolMod",
       align: "center",
     },
-    {
-      title: "SBN",
-      dataIndex: "sbn",
-      align: "center",
-    },
+    // {
+    //   title: "SBN",
+    //   dataIndex: "sbn",
+    //   align: "center",
+    // },
     {
       title: "GLOSA",
       dataIndex: "glosa",
       align: "center",
     },
-    {
-      title: "BIEN",
-      dataIndex: "nombreItem",
-      align: "center",
-    },
+    // {
+    //   title: "BIEN",
+    //   dataIndex: "nombreItem",
+    //   align: "center",
+    // },
     {
       title: "DEPENDENCIA",
       dataIndex: "nombreDependencia",
