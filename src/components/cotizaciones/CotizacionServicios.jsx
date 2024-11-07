@@ -27,7 +27,7 @@ const CotizacionServicios = ({ setTitle }) => {
 
     const columns = [
         {
-            title: "COD",
+            title: "NOMBRE",
             dataIndex: "secSolMod",
             align: "center",
         },
