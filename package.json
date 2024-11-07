@@ -2,6 +2,7 @@
   "name": "ordenes-compra",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/pagina",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

@@ -5,7 +5,7 @@ import {
   LaptopOutlined,
   ApartmentOutlined,
   AreaChartOutlined,
-  SolutionOutlined,
+  SolutionOutlined, FileTextOutlined
 } from "@ant-design/icons";
 import "./styles/sidebar.css";
 import imagen from "../assets/autodema.png";
@@ -25,7 +25,7 @@ const Sidebar = () => {
     if (permisos.includes("recepcion")) {
       items.push({
         key: "/cotizacion",
-        icon: <UserOutlined />,
+        icon: <FileTextOutlined />,
         label: "Cotización B/S",
       });
     }
