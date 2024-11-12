@@ -22,7 +22,7 @@ const Sidebar = () => {
     const rol = JSON.parse(localStorage.getItem("rol")); // Obtiene el rol almacenado
     const permisos = JSON.parse(localStorage.getItem("permisos")); // Obtiene los permisos almacenados
     const items = [];
-    if (permisos.includes("recepcion")) {
+    if (permisos.includes("cotizaciones")) {
       items.push({
         key: "/cotizacion",
         icon: <FileTextOutlined />,
