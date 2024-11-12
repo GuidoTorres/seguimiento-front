@@ -1,9 +1,10 @@
 import { Input, Typography, Button, notification } from "antd";
 import React, { useContext, useState } from "react";
 import imagen from "../../assets/autodema.png";
+import frayle from "../../assets/frayle.jpg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { OrdenCompraContext } from "../../context/OrdenCompraContext";
-const Login = ({}) => {
+const Login = ({ }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { setIsLogged, isLogged } = useContext(OrdenCompraContext);
@@ -78,13 +79,16 @@ const Login = ({}) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backgroundImage: `url(${frayle})`, // Usar template literal para incluir la imagen importada
+        backgroundSize: "cover", // Opcional: ajusta el tamaño de la imagen
+        backgroundPosition: "center", 
       }}
     >
       <div
         style={{
           border: "1px solid ligthgrey",
           width: "400px",
-          height: "380px",
+          height: "340px",
           borderRadius: "8px",
           padding: "20px",
           backgroundColor: "white",
