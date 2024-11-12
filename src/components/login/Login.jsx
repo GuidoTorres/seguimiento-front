@@ -72,60 +72,74 @@ const Login = ({ }) => {
     }
   };
   return (
+<div style={{ position: "relative" }}>
+  {/* Imagen de fondo completa */}
+  <img 
+    src={frayle} 
+    alt="background" 
+    style={{ 
+      width: "100vw",
+      height: "100vh",
+      position: "absolute",
+      top: 0,
+      left: 0,
+    }} 
+  />
+
+  {/* Contenedor del formulario */}
+  <div
+    style={{
+      width: "100vw",
+      height: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      position: "relative",
+    }}
+  >
     <div
       style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundImage: `url(${frayle})`, // Usar template literal para incluir la imagen importada
-        backgroundSize: "cover", // Opcional: ajusta el tamaño de la imagen
-        backgroundPosition: "center", 
+        border: "1px solid lightgrey",
+        width: "400px",
+        height: "340px",
+        borderRadius: "8px",
+        padding: "20px",
+        backgroundColor: "white",
       }}
     >
-      <div
-        style={{
-          border: "1px solid ligthgrey",
-          width: "400px",
-          height: "340px",
-          borderRadius: "8px",
-          padding: "20px",
-          backgroundColor: "white",
-        }}
-      >
-        <img src={imagen} alt="logo" width={"100%"} />
+      <img src={imagen} alt="logo" width={"100%"} />
 
-        <div style={{ marginTop: "40px", textAlign: "left" }}>
-          <Input
-            onChange={(e) => handleData(e.target.value, "usuario")}
-            placeholder={"Usuario"}
-            onKeyPress={(e) => e.key === "Enter" && auth()}
+      <div style={{ marginTop: "40px", textAlign: "left" }}>
+        <Input
+          onChange={(e) => handleData(e.target.value, "usuario")}
+          placeholder={"Usuario"}
+          onKeyPress={(e) => e.key === "Enter" && auth()}
+        />
+      </div>
 
-          />
-        </div>
-        <div style={{ marginTop: "25px", textAlign: "left" }}>
-          <Input.Password
-            onChange={(e) => handleData(e.target.value, "contrasenia")}
-            placeholder={"Contraseña"}
-            onKeyPress={(e) => e.key === "Enter" && auth()}
+      <div style={{ marginTop: "25px", textAlign: "left" }}>
+        <Input.Password
+          onChange={(e) => handleData(e.target.value, "contrasenia")}
+          placeholder={"Contraseña"}
+          onKeyPress={(e) => e.key === "Enter" && auth()}
+        />
+      </div>
 
-          />
-        </div>
-        <div style={{ marginTop: "30px" }}>
-          <Button
-            style={{
-              width: "100%",
-              backgroundColor: "#03A859",
-              color: "white",
-            }}
-            onClick={auth}
-          >
-            Iniciar Sesión
-          </Button>
-        </div>
+      <div style={{ marginTop: "30px" }}>
+        <Button
+          style={{
+            width: "100%",
+            backgroundColor: "#03A859",
+            color: "white",
+          }}
+          onClick={auth}
+        >
+          Iniciar Sesión
+        </Button>
       </div>
     </div>
+  </div>
+</div>
   );
 };
 
