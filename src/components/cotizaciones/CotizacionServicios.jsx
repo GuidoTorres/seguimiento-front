@@ -23,6 +23,7 @@ const CotizacionServicios = ({ setTitle }) => {
 
         if (info) {
             setCotizaciones(info);
+            setFilteredData(info)
         }
     };
 
