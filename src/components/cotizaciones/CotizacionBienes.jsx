@@ -1,4 +1,4 @@
-import { Flex, notification, Switch, Table } from 'antd'
+import { Flex, Input, notification, Switch, Table } from 'antd'
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import {
@@ -8,7 +8,8 @@ const CotizacionBienes = ({ setTitle }) => {
 
 
   const [cotizaciones, setCotizaciones] = useState([])
-
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda
+  const [filteredData, setFilteredData] = useState(cotizaciones);
   useEffect(() => {
     setTitle("Cotización Bienes")
     getCotizaciones()
@@ -23,12 +24,13 @@ const CotizacionBienes = ({ setTitle }) => {
 
     if (info) {
       setCotizaciones(info);
+      setFilteredData(info)
     }
   }
 
   const columns = [
     {
-      title: "COD",
+      title: "SOLICITUD",
       dataIndex: "secSolMod",
       align: "center",
     },
@@ -143,17 +145,41 @@ const CotizacionBienes = ({ setTitle }) => {
       notification.error({ message: "Es necesario subir el pdf de la cotización para la publicación del mismo." })
     }
   };
+  const handleSearch = (e) => {
+    const value = e?.target?.value?.toLowerCase().trim();
+    
+    if (value) {
+      const filterData = cotizaciones.filter(item =>
+        // Busca en múltiples campos
+        item?.secSolMod?.toString().toLowerCase().includes(value) || // Código
+        item?.glosa?.toLowerCase().includes(value) || // Glosa
+        item?.nombreDependencia?.toLowerCase().includes(value) // Dependencia
+      );
+      setFilteredData(filterData);
+      setSearchTerm(value);
+    } else {
+      // Si no hay valor de búsqueda, muestra todos los datos
+      setFilteredData(cotizaciones);
+      setSearchTerm("");
+    }
+  };
   return (
-    <div style={{ marginTop: "20px" }}>
-      <Table
-        columns={columns}
-        dataSource={cotizaciones?.map((item, index) => ({
-          ...item,
-          key: item.id || index,
-        }))}
+    <>
+      <Flex>
+        <Input style={{ width: "250px" }} placeholder='Buscar por código de solicitud' onChange={e => handleSearch(e)} />
+      </Flex>
+      <div style={{ marginTop: "20px" }}>
+        <Table
+          style={{ marginTop: "10px" }}
+          columns={columns}
+          dataSource={filteredData?.map((item, index) => ({
+            ...item,
+            key: item.id || index,
+          }))}
 
-      />
-    </div>
+        />
+      </div>
+    </>
   )
 }
 

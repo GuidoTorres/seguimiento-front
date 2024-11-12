@@ -4,7 +4,6 @@ import Sidebar from "../components/Sidebar";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import "./styles/mainPage.css";
 import { Routes, Route } from "react-router-dom";
-
 import { useNavigate, useLocation } from "react-router-dom";
 import Login from "../components/login/Login";
 import { ProtectedRoute } from "../routes/ProtectedRoute";

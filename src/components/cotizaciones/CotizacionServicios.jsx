@@ -1,10 +1,11 @@
-import { Flex, notification, Switch, Table } from "antd";
+import { Flex, notification, Switch, Table, Input } from "antd";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { FilePdfOutlined } from "@ant-design/icons";
 const CotizacionServicios = ({ setTitle }) => {
     const [cotizaciones, setCotizaciones] = useState([]);
-
+    const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda
+    const [filteredData, setFilteredData] = useState(cotizaciones);
     useEffect(() => {
         setTitle("Cotización Servicios");
 
@@ -27,7 +28,7 @@ const CotizacionServicios = ({ setTitle }) => {
 
     const columns = [
         {
-            title: "NOMBRE",
+            title: "SOLICITUD",
             dataIndex: "secSolMod",
             align: "center",
         },
@@ -142,12 +143,33 @@ const CotizacionServicios = ({ setTitle }) => {
             notification.error({ message: "Es necesario subir el pdf de la cotización para la publicación del mismo." })
         }
     };
+    const handleSearch = (e) => {
+        const value = e?.target?.value?.toLowerCase().trim();
 
+        if (value) {
+            const filterData = cotizaciones.filter(item =>
+                // Busca en múltiples campos
+                item?.secSolMod?.toString().toLowerCase().includes(value) || // Código
+                item?.glosa?.toLowerCase().includes(value) || // Glosa
+                item?.nombreDependencia?.toLowerCase().includes(value) // Dependencia
+            );
+            setFilteredData(filterData);
+            setSearchTerm(value);
+        } else {
+            // Si no hay valor de búsqueda, muestra todos los datos
+            setFilteredData(cotizaciones);
+            setSearchTerm("");
+        }
+    };
     return (
         <div style={{ marginTop: "20px" }}>
+            <Flex>
+                <Input style={{ width: "250px" }} placeholder='Buscar por código de solicitud' onChange={e => handleSearch(e)} />
+            </Flex>
             <Table
+                style={{ marginTop: "10px" }}
                 columns={columns}
-                dataSource={cotizaciones?.map((item, index) => ({
+                dataSource={filteredData?.map((item, index) => ({
                     ...item,
                     key: item.id || index,
                 }))}
