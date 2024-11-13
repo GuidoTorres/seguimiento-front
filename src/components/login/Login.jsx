@@ -41,6 +41,7 @@ const Login = ({ }) => {
 
       // Crear un mapa de rutas basado en los permisos
       const permissionRoutes = {
+        cotizacion:"/cotizacion",
         recepcion: "/recepcion",
         conformidades: "/conformidad",
         seguimiento: "/seguimiento",
@@ -49,17 +50,22 @@ const Login = ({ }) => {
       };
 
       if (permisos && permisos.length > 0) {
-        // Buscar el primer permiso que coincida en el mapa de rutas
-        const firstValidPermission = permisos.find(
-          (permiso) => permissionRoutes[permiso]
-        );
-
-        if (firstValidPermission) {
-          // Redirigir a la ruta correspondiente del primer permiso válido
-          navigate(permissionRoutes[firstValidPermission]);
+        // Dar prioridad a la redirección a "cotizacion" si existe
+        if (permisos.includes("cotizaciones")) {
+          navigate(permissionRoutes["cotizacion"]);
         } else {
-          // Redirigir a una ruta por defecto si no se encuentra ningún permiso válido
-          navigate("/default-route");
+          // Si no tiene "cotizacion", buscar el primer permiso que coincida en el mapa de rutas
+          const firstValidPermission = permisos.find(
+            (permiso) => permissionRoutes[permiso]
+          );
+  
+          if (firstValidPermission) {
+            // Redirigir a la ruta correspondiente del primer permiso válido
+            navigate(permissionRoutes[firstValidPermission]);
+          } else {
+            // Redirigir a una ruta por defecto si no se encuentra ningún permiso válido
+            navigate("/default-route");
+          }
         }
       } else {
         // En caso de que no haya permisos, redirigir a una ruta por defecto
