@@ -54,6 +54,11 @@ const CotizacionServicios = ({ setTitle }) => {
             align: "center",
         },
         {
+            title: "PLAZO",
+            dataIndex: "plazo",
+            align: "center",
+          },
+        {
             title: "PDF",
             render: (_, record) => (
                 <div>
