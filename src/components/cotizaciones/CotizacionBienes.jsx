@@ -25,16 +25,15 @@ const CotizacionBienes = ({ setTitle }) => {
       credentials: "include",
     });
     const info = await response.json();
-
-
     if (info) {
       setCotizaciones(info);
       setFilteredData(info)
     }
   }
-  const edit = (record) => {
+  const edit = (record) => {   
     form.setFieldsValue({
       glosa: record.glosa,
+      plazo: record.plazo,
       ...record,
     });
     setEditingKey(record.id);
@@ -44,7 +43,6 @@ const CotizacionBienes = ({ setTitle }) => {
   const cancel = () => {
     setEditingKey('');
   };
-
   const save = async (key) => {
     try {
       const row = await form.validateFields();
@@ -75,22 +73,22 @@ const CotizacionBienes = ({ setTitle }) => {
         const index = newData.findIndex((item) => key === item.id);
         if (index > -1) {
           newData[index].glosa = row.glosa;
+          newData[index].plazo = row.plazo;
           setFilteredData(newData);
           setCotizaciones(newData);
         }
 
         setEditingKey('');
-        notification.success({ message: result.msg || 'Glosa actualizada exitosamente' });
+        notification.success({ message: result.msg || 'Actualizado exitosamente!' });
       } else {
-        notification.error({ message: result.msg || 'Error al actualizar la glosa' });
+        notification.error({ message: result.msg || 'Error al actualizar.' });
       }
 
     } catch (errInfo) {
       console.log('Error al validar/actualizar:', errInfo);
-      notification.error({ message: 'Error al actualizar la glosa' });
+      notification.error({ message: 'Error al actualizar' });
     }
   };
-
   const EditableCell = ({
     editing,
     dataIndex,
@@ -213,6 +211,8 @@ const CotizacionBienes = ({ setTitle }) => {
       title: "PLAZO",
       dataIndex: "plazo",
       align: "center",
+      editable: true,  
+
     },
     {
       title: 'ACCIONES',
