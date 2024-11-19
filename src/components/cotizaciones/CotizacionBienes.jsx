@@ -7,6 +7,7 @@ import {
   FilePdfOutlined,
   SaveOutlined
 } from "@ant-design/icons";
+import "./styles/cotizacion.css"
 const CotizacionBienes = ({ setTitle }) => {
 
   const [form] = Form.useForm();
@@ -215,6 +216,11 @@ const CotizacionBienes = ({ setTitle }) => {
 
     },
     {
+      title: "FECHA",
+      render: (_, record) => record?.fecha_vencimiento ? record?.fecha_vencimiento: "---",
+      align: "center",
+    },
+    {
       title: 'ACCIONES',
       dataIndex: 'operation',
       align: "center",
@@ -285,6 +291,21 @@ const CotizacionBienes = ({ setTitle }) => {
       }),
     };
   });
+
+  const getRowClassName = (record) => {
+    
+    if (!record.fecha_vencimiento) return '';
+    
+    const today = dayjs();
+    const publishDate = dayjs(record.fecha_publicacion);
+    const dueDate = dayjs(record.fecha_vencimiento);
+    const daysUntilDue = dueDate.diff(today, 'day');
+   
+    if (publishDate.isSame(today, 'day')) return 'green';
+    if (daysUntilDue <= 0) return 'red'; 
+    if (daysUntilDue == 1) return 'yellow';
+    return '';
+   };
   return (
     <>
       <Flex>
@@ -304,6 +325,7 @@ const CotizacionBienes = ({ setTitle }) => {
               ...item,
               key: item.id || index,
             }))}
+            rowClassName={getRowClassName}
           />
         </Form>
       </div>
