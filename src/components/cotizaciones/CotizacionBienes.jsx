@@ -293,19 +293,32 @@ const CotizacionBienes = ({ setTitle }) => {
   });
 
   const getRowClassName = (record) => {
-    
     if (!record.fecha_vencimiento) return '';
+  
+    // Convertir string a objeto Date primero
+    const fechaPublicacion = record.fecha?.split('/').reverse().join('-');
+    const fechaVencimiento = record.fecha_vencimiento?.split('/').reverse().join('-');
     
     const today = dayjs();
-    const publishDate = dayjs(record.fecha_publicacion);
-    const dueDate = dayjs(record.fecha_vencimiento);
+    const publishDate = dayjs(fechaPublicacion);
+    const dueDate = dayjs(fechaVencimiento);
     const daysUntilDue = dueDate.diff(today, 'day');
-   
+  
+    console.log('Fechas:', {
+      fecha_original: record.fecha,
+      fecha_convertida: fechaPublicacion,
+      hoy: today.format('YYYY-MM-DD'),
+      publicacion: publishDate.format('YYYY-MM-DD'),
+      vencimiento: dueDate.format('YYYY-MM-DD'),
+      diasRestantes: daysUntilDue
+    });
+  
     if (publishDate.isSame(today, 'day')) return 'green';
-    if (daysUntilDue <= 0) return 'red'; 
-    if (daysUntilDue == 1) return 'yellow';
+    if (daysUntilDue < 0) return 'red';
+    if (daysUntilDue <= 1) return 'yellow';
     return '';
-   };
+  };
+  
   return (
     <>
       <Flex>

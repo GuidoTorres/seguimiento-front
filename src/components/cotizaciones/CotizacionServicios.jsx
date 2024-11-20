@@ -150,9 +150,7 @@ const CotizacionServicios = ({ setTitle }) => {
             notification.error({ message: result.msg });
         }
     };
-
     const handleEstado = async (record) => {
-        console.log(record.id);
         if (record.pdf) {
 
             const response = await fetch(
@@ -195,7 +193,6 @@ const CotizacionServicios = ({ setTitle }) => {
             setSearchTerm("");
         }
     };
-
     const columns = [
         {
             title: "SOLICITUD",
@@ -276,7 +273,6 @@ const CotizacionServicios = ({ setTitle }) => {
         },
 
     ];
-
     const mergedColumns = columns.map((col) => {
         if (!col.editable) {
             return col;
@@ -291,6 +287,7 @@ const CotizacionServicios = ({ setTitle }) => {
             }),
         };
     });
+
     return (
         <div style={{ marginTop: "20px" }}>
             <Flex>
