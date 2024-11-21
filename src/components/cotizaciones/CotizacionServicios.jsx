@@ -13,8 +13,14 @@ const CotizacionServicios = ({ setTitle }) => {
     const [searchTerm, setSearchTerm] = useState(""); // Estado para la búsqueda
     const [filteredData, setFilteredData] = useState(cotizaciones);
     const [editingKey, setEditingKey] = useState('');
+    const [tableState, setTableState] = useState({
+        pagination: {
+            current: 1,
+            pageSize: 10
+        },
+        searchText: ''
+    });
     const isEditing = (record) => record.id === editingKey;
-
     useEffect(() => {
         setTitle("Cotización Servicios");
         getCotizaciones();
@@ -51,8 +57,6 @@ const CotizacionServicios = ({ setTitle }) => {
     const save = async (key) => {
         try {
             const row = await form.validateFields();
-
-            // Crear el objeto con solo los datos necesarios para actualizar
             const datosActualizar = {
                 id: key,
                 glosa: row.glosa,
@@ -70,20 +74,31 @@ const CotizacionServicios = ({ setTitle }) => {
                     body: JSON.stringify(datosActualizar)
                 }
             );
+
             const result = await response.json();
+
             if (response.ok) {
                 const newData = [...filteredData];
                 const index = newData.findIndex((item) => key === item.id);
                 if (index > -1) {
                     newData[index].glosa = row.glosa;
-                    newData[index].plazo = row.plazo
+                    newData[index].plazo = row.plazo;
                     setFilteredData(newData);
-                    setCotizaciones(newData);
+                    setCotizaciones(prev => {
+                        const updatedData = [...prev];
+                        const cotIndex = updatedData.findIndex((item) => key === item.id);
+                        if (cotIndex > -1) {
+                            updatedData[cotIndex].glosa = row.glosa;
+                            updatedData[cotIndex].plazo = row.plazo;
+                        }
+                        return updatedData;
+                    });
                 }
+
                 setEditingKey('');
                 notification.success({ message: result.msg || 'Actualizado exitosamente!' });
             } else {
-                notification.error({ message: result.msg || 'Error al actualizar,' });
+                notification.error({ message: result.msg || 'Error al actualizar.' });
             }
 
         } catch (errInfo) {
@@ -91,7 +106,6 @@ const CotizacionServicios = ({ setTitle }) => {
             notification.error({ message: 'Error al actualizar' });
         }
     };
-
     const EditableCell = ({
         editing,
         dataIndex,
@@ -121,7 +135,6 @@ const CotizacionServicios = ({ setTitle }) => {
             </td>
         );
     };
-
     const handlePdf = async (e, record) => {
         const file = e.target.files[0]; // Captura el archivo seleccionado
 
@@ -177,21 +190,31 @@ const CotizacionServicios = ({ setTitle }) => {
     };
     const handleSearch = (e) => {
         const value = e?.target?.value?.toLowerCase().trim();
+        setTableState(prev => ({
+            ...prev,
+            searchText: value,
+            pagination: { ...prev.pagination, current: 1 } // Reset to first page on new search
+        }));
 
         if (value) {
             const filterData = cotizaciones.filter(item =>
-                // Busca en múltiples campos
-                item?.secSolMod?.toString().toLowerCase().includes(value) || // Código
-                item?.glosa?.toLowerCase().includes(value) || // Glosa
-                item?.nombreDependencia?.toLowerCase().includes(value) // Dependencia
+                item?.secSolMod?.toString().toLowerCase().includes(value) ||
+                item?.glosa?.toLowerCase().includes(value) ||
+                item?.nombreDependencia?.toLowerCase().includes(value)
             );
             setFilteredData(filterData);
             setSearchTerm(value);
         } else {
-            // Si no hay valor de búsqueda, muestra todos los datos
             setFilteredData(cotizaciones);
             setSearchTerm("");
         }
+    };
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableState(prev => ({
+            ...prev,
+            pagination: pagination
+        }));
     };
     const columns = [
         {
@@ -288,10 +311,27 @@ const CotizacionServicios = ({ setTitle }) => {
         };
     });
 
+    const getRowClassName = (record) => {
+        if (!record.fecha_vencimiento) return '';
+
+        // Convertir string a objeto Date primero
+        const fechaPublicacion = record.fecha?.split('/').reverse().join('-');
+        const fechaVencimiento = record.fecha_vencimiento?.split('/').reverse().join('-');
+
+        const today = dayjs();
+        const publishDate = dayjs(fechaPublicacion);
+        const dueDate = dayjs(fechaVencimiento);
+        const daysUntilDue = dueDate.diff(today, 'day');
+
+        if (publishDate.isSame(today, 'day')) return 'green';
+        if (daysUntilDue < 0) return 'red';
+        if (daysUntilDue <= 1) return 'yellow';
+        return '';
+    };
     return (
         <div style={{ marginTop: "20px" }}>
             <Flex>
-                <Input style={{ width: "250px" }} placeholder='Buscar por código de solicitud' onChange={e => handleSearch(e)} />
+                <Input style={{ width: "250px" }} value={tableState.searchText} placeholder='Buscar por código de solicitud' onChange={e => handleSearch(e)} />
             </Flex>
             <Form form={form} component={false}>
                 <Table
@@ -306,6 +346,9 @@ const CotizacionServicios = ({ setTitle }) => {
                         ...item,
                         key: item.id || index,
                     }))}
+                    rowClassName={getRowClassName}
+                    pagination={tableState.pagination}
+                    onChange={handleTableChange}
                 />
             </Form>
         </div>
